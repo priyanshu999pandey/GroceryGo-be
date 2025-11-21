@@ -122,6 +122,7 @@ export const updateCategoryController = async (req, res) => {
           success: false,
         });
       }
+      
       imageUrl = uploaded.secure_url;
     }
 
@@ -211,3 +212,5 @@ export const deleteCategoryController = async (req, res) => {
     });
   }
 };
+
+
