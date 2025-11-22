@@ -29,11 +29,10 @@ import uploadImageCloudinary from "../utils/uploadImageCloudinary.js";
 //       return res.status(400).json({
 //         success: false,
 //         message: "atleast one image required",
-       
+
 //       });
 //     }
 
-   
 //     const imageUrls = [];
 
 //     for (const file of files) {
@@ -81,7 +80,6 @@ import uploadImageCloudinary from "../utils/uploadImageCloudinary.js";
 //       data:product
 //     });
 
-
 //   } catch (error) {
 //     console.error("Controller Error:", error);
 //     return res.status(500).json({
@@ -91,7 +89,6 @@ import uploadImageCloudinary from "../utils/uploadImageCloudinary.js";
 //     });
 //   }
 // };
-
 
 export const createProductController = async (req, res) => {
   try {
@@ -104,7 +101,7 @@ export const createProductController = async (req, res) => {
       price,
       discount,
       description,
-      more_detail
+      more_detail,
     } = req.body;
 
     // ---------- parse JSON-string fields (if frontend sent JSON.stringify)
@@ -138,25 +135,31 @@ export const createProductController = async (req, res) => {
     }
     // ---------- end parse
 
-     const files = req.files || (req.file ? [req.file] : []);
+    const files = req.files || (req.file ? [req.file] : []);
 
-    if(!name || !category || !subCategory || !unit || !stock || !price || !description ){
-        return res.status(400).json({
-            message:"All fields required",
-            success:false,
-            error:true
-        })
+    if (
+      !name ||
+      !category ||
+      !subCategory ||
+      !unit ||
+      !stock ||
+      !price ||
+      !description
+    ) {
+      return res.status(400).json({
+        message: "All fields required",
+        success: false,
+        error: true,
+      });
     }
-    console.log("fileData",files)
+    console.log("fileData", files);
     if (files.length == 0) {
       return res.status(400).json({
         success: false,
         message: "atleast one image required",
-       
       });
     }
 
-   
     const imageUrls = [];
 
     for (const file of files) {
@@ -165,25 +168,30 @@ export const createProductController = async (req, res) => {
       if (!result) {
         return res.status(500).json({
           success: false,
-          message: "Image upload failed for one of the files"
+          message: "Image upload failed for one of the files",
         });
       }
 
-      const url = result.url || result.secure_url || result.secureUrl || result.secure_URL;
+      const url =
+        result.url ||
+        result.secure_url ||
+        result.secureUrl ||
+        result.secure_URL;
       if (!url) {
         return res.status(500).json({
           success: false,
-          message: "Upload succeeded but no url returned from uploadImageCloudinary"
+          message:
+            "Upload succeeded but no url returned from uploadImageCloudinary",
         });
       }
 
       imageUrls.push(url);
     }
 
-     const payload = {
+    const payload = {
       name,
       image: imageUrls,
-      category: categoryParsed,     // <-- use parsed value
+      category: categoryParsed, // <-- use parsed value
       subCategory: subCategoryParsed, // <-- use parsed value
       unit,
       stock,
@@ -193,15 +201,55 @@ export const createProductController = async (req, res) => {
       more_detail: moreDetailParsed, // <-- use parsed value
     };
 
-    const product = await ProductModel.create(payload)
+    const product = await ProductModel.create(payload);
 
     return res.status(201).json({
       success: true,
       message: "Product created successfully",
-      data:product
+      data: product,
     });
+  } catch (error) {
+    console.error("Controller Error:", error);
+    return res.status(500).json({
+      message: error.message || "Internal Server Error",
+      error: true,
+      success: false,
+    });
+  }
+};
 
+export const getProductController = async (req, res) => {
+  try {
+    let { page, limit, search } = req.body;
 
+    // convert to numbers and set defaults
+    page = Number(page) || 1;
+    limit = Number(limit) || 10;
+
+    const query = search
+      ? { $text: { $search: search } } // ensure you have a text index on relevant fields
+      : {};
+
+    const skip = (page - 1) * limit;
+
+    const [data, totalCount] = await Promise.all([
+      ProductModel.find(query)
+        .sort({ createdAt: -1 }) // use sort, not toSorted
+        .skip(skip)
+        .limit(limit),
+      ProductModel.countDocuments(query),
+    ]);
+
+    return res.status(200).json({
+      message: "Product Data",
+      error: false,
+      success: true,
+      page,
+      limit,
+      totalCount,
+      totalNoPage: Math.ceil(totalCount / limit),
+      data,
+    });
   } catch (error) {
     console.error("Controller Error:", error);
     return res.status(500).json({

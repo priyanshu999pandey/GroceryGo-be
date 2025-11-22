@@ -52,5 +52,17 @@ const productSchema = new mongoose.Schema({
     timestamps:true
 })
 
+
+//create a text index
+productSchema.index({
+    name:"text",
+    description:"text"
+},{
+   weights: {
+            name: 10,         // Matches in 'name' are 10 times more relevant
+            description: 5    // Matches in 'description' are 5 times more relevant
+        }
+})
+
 const ProductModel = mongoose.model("Product",productSchema);
 export default ProductModel;
