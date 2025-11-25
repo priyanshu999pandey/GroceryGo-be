@@ -6,7 +6,7 @@ const subCategoryRouter = Router();
 import { AddSubCategoryController, deleteSubCategoryController, fetchAllSubCategoryController, updateSubCategoryController } from "../controllers/subCategory.controller.js";
 
 subCategoryRouter.post("/add-subCategory",auth,upload.single("image"),AddSubCategoryController)
-subCategoryRouter.get("/fetch-subCategory",auth,fetchAllSubCategoryController)
+subCategoryRouter.get("/fetch-subCategory",fetchAllSubCategoryController)
 subCategoryRouter.put("/update-subCategory/:id",auth,upload.single("image"),updateSubCategoryController)
 subCategoryRouter.delete("/delete-subCategory/:id",auth,deleteSubCategoryController)
 

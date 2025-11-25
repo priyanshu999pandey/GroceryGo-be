@@ -5,7 +5,7 @@ import upload from "../middleware/multer.js"
 
 const categoryRouter = Router()
 categoryRouter.post("/add-category",auth,upload.single("image"),AddCategoryController)
-categoryRouter.get("/fetch-category",auth,fetchCategoryController)
+categoryRouter.get("/fetch-category",fetchCategoryController)
 categoryRouter.put("/update-category",auth,upload.single("image"),updateCategoryController)
 categoryRouter.delete("/delete-category/:id",auth,deleteCategoryController)
 
