@@ -262,28 +262,28 @@ export const getProductController = async (req, res) => {
 
 export const getProductByCategory = async (req, res) => {
   try {
+    const { id } = req.body;
 
-    const {id} = req.body;
-
-    if(!id){
+    if (!id) {
       return res.status(400).json({
-        message:"provide category id",
-        error :true,
-        success:false
-      })
+        message: "provide category id",
+        error: true,
+        success: false,
+      });
     }
 
-    const product =  await ProductModel.find({
-      category:{$in:id}
-    }).limit(15).sort({created : -1})
+    const product = await ProductModel.find({
+      category: { $in: id },
+    })
+      .limit(10)
+      .sort({ created: -1 });
 
     return res.status(200).json({
-      message:"category product list",
-      data:product,
-      error:false,
-      success:true,
-    })
-
+      message: "category product list",
+      data: product,
+      error: false,
+      success: true,
+    });
   } catch (error) {
     console.error("Controller Error:", error);
     return res.status(500).json({
@@ -294,54 +294,132 @@ export const getProductByCategory = async (req, res) => {
   }
 };
 
-export const getProductByCategoryIdAndsubCategoryId = async(req,res )=>{
+export const getProductByCategoryIdAndsubCategoryId = async (req, res) => {
   try {
-     let {categoryId,subCategoryId,page,limit} = req.body;
+    let { categoryId, subCategoryId, page, limit } = req.body;
 
-     if(!categoryId || !subCategoryId){
+    if (!categoryId || !subCategoryId) {
       return res.status(400).json({
-        message:"Provide categoryId and subCategoryId",
-        error:true,
-        success:false,
-      })
-     }
+        message: "Provide categoryId and subCategoryId",
+        error: true,
+        success: false,
+      });
+    }
 
-     if(!page){
-         page = 1
-     }
+    if (!page) {
+      page = 1;
+    }
 
-     if(!limit){
-      limit = 10
-     }
-     const query = {
-      category:{ $in :categoryId},
-      subCategory:{$in:subCategoryId}
-     }
+    if (!limit) {
+      limit = 10;
+    }
+    const query = {
+      category: { $in: categoryId },
+      subCategory: { $in: subCategoryId },
+    };
 
-     const skip = (page-1)*limit
+    const skip = (page - 1) * limit;
 
-     const [data,dataCount] = await Promise.all([
-        ProductModel.find(query).sort({createdAt:-1}).skip().limit(limit),
-        ProductModel.countDocuments(query)
+    const [data, dataCount] = await Promise.all([
+      ProductModel.find(query).sort({ createdAt: -1 }).skip().limit(limit),
+      ProductModel.countDocuments(query),
+    ]);
 
-     ])
-
-   return res.status(200).json({
-      message:"Product list",
-      data:data,
-      totalCount:dataCount,
-      page:page,
-      limit:limit,
-      success:true,
-      error:false,
-   })
-
+    return res.status(200).json({
+      message: "Product list",
+      data: data,
+      totalCount: dataCount,
+      page: page,
+      limit: limit,
+      success: true,
+      error: false,
+    });
   } catch (error) {
-      console.error("Controller Error:", error);
-     return res.status(500).json({
+    console.error("Controller Error:", error);
+    return res.status(500).json({
       message: error.message || "Internal Server Error",
       error: true,
       success: false,
     });
   }
+};
+
+export const getProductDetailByIdController = async (req, res) => {
+  try {
+    const { productId } = req.body;
+
+    if (!productId) {
+      return res.status(400).json({
+        message: "product Id required",
+        success: false,
+        error: true,
+      });
+    }
+
+    const productData = await ProductModel.findById(productId);
+
+    if (!productData) {
+      return res.status(401).json({
+        message: "Data not found",
+        error: true,
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      message: "productData fetched successfully",
+      success: true,
+      error: false,
+      data: productData,
+    });
+  } catch (error) {
+    console.error("Controller Error:", error);
+    return res.status(500).json({
+      message: error.message || "Internal Server Error",
+      error: true,
+      success: false,
+    });
+  }
+};
+
+export const getAllProductByCategoryUsingIdController = async(req,res)=>{
+   try {
+
+    const {categoryId} = req.body;
+
+    if(!categoryId){
+      return res.status(400).json({
+        message:"Id required",
+        success:false,
+        error:true
+      })
+    }
+
+    const data = await ProductModel.find({
+      category:categoryId
+    })
+     
+    if(!data){
+      return res.status(400).json({
+        message:"datanot found",
+        error:true,
+        success:false
+      })
+    }
+
+    return res.json({
+      message:"data fetched successfully",
+      error:false,
+      success:true,
+      data:data
+    })
+    
+   } catch (error) {
+     console.error("Controller Error:", error);
+    return res.status(500).json({
+      message: error.message || "Internal Server Error",
+      error: true,
+      success: false,
+    });
+   }
 }
