@@ -18,15 +18,20 @@ const addressSchema = new mongoose.Schema({
 
     },
     country:{
-        Type:String,
+        type:String,
+        
     },
     mobile:{
-        type:Number,
-        default:null
+        type:String,
+        default:""
     },
     status:{
         type:Boolean,
         default:true
+    },
+    userId:{
+        type:String,
+        default:""
     }
 
 },{
