@@ -27,6 +27,12 @@ app.use(cors({
   credentials: true,
 }));
 
+app.get("/", (req, res) => {
+    res.json({
+        message: "Server is running successfully",
+        status: 200
+    });
+});
 // ---------- IMPORTANT: register the webhook route BEFORE express.json() ----------
 app.post(
   "/api/order/webhook",
