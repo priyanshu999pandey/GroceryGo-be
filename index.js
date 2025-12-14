@@ -28,7 +28,7 @@ app.use(
       "http://localhost:5173",
       "https://grocery-go-fe.vercel.app"
     ],
-   
+    
     credentials: true,
   })
 );
