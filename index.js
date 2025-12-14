@@ -23,7 +23,7 @@ const app = express();
 
 // CORS (keep as you had it)
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: proccess.env.FRONTEND_URL,
   credentials: true,
 }));
 
