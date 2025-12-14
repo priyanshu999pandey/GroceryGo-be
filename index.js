@@ -29,19 +29,8 @@ app.use(
       "https://grocery-go-fe.vercel.app"
     ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "Stripe-Signature"
-    ],
-    optionsSuccessStatus: 200,
   })
 );
-
-// Required for Vercel serverless
-app.options("*", cors());
-
 
 
 app.get("/", (req, res) => {
