@@ -22,10 +22,17 @@ import { webhookStripe } from "./controllers/order.controller.js";
 const app = express();
 
 // CORS (keep as you had it)
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://grocery-go-fe.vercel.app"
+    ],
+   
+    credentials: true,
+  })
+);
+
 
 app.get("/", (req, res) => {
     res.json({
