@@ -99,7 +99,7 @@ export const paymentController = async (req, res) => {
     const userId = req.userId;
     const { list_items, totalAmt, addressId, subTotalAmt } = req.body;
 
-    const line_items = list_items.map((item) => {
+    const line_items = list_items.map((item) =>{
       return {
         price_data: {
           currency: "inr",
@@ -135,8 +135,8 @@ export const paymentController = async (req, res) => {
         addressId: addressId,
       },
       line_items: line_items,
-      success_url: `http://localhost:5173/success`,
-      cancel_url: `http://localhost:5173/cancel`,
+      success_url: `${process.env.FRONTEND_URL}/success`,
+      cancel_url: `${process.env.FRONTEND_URL}/cancel`,
     };
 
     const session = await stripe.checkout.sessions.create(params);
