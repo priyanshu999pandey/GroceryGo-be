@@ -2,12 +2,12 @@ const verifyEmailTemplate = ({ name, url }) => {
   return `
   <div style="font-family: Arial, sans-serif; background-color: #f9fafb; padding: 40px;">
     <div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 30px;">
-      <h2 style="color: #333; text-align: center;">Welcome to <span style="color: #007bff;">BlinkeyIt</span> 🚀</h2>
+      <h2 style="color: #333; text-align: center;">Welcome to <span style="color: #007bff;">GroceryGo</span> 🚀</h2>
       
       <p style="font-size: 16px; color: #555;">Dear <strong>${name}</strong>,</p>
       
       <p style="font-size: 15px; color: #555; line-height: 1.6;">
-        Thank you for registering with <strong>BlinkeyIt</strong>!  
+        Thank you for registering with <strong>GroceryGo</strong>!  
         We’re excited to have you onboard our fast-moving digital ecosystem.
       </p>
 
