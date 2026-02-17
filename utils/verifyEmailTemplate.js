@@ -29,7 +29,7 @@ const verifyEmailTemplate = ({ name, url }) => {
       <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
 
       <p style="font-size: 12px; color: #999; text-align: center;">
-        © ${new Date().getFullYear()} BlinkeyIt Technologies. All rights reserved.
+        © ${new Date().getFullYear()} GroceryGo Technologies. All rights reserved.
       </p>
     </div>
   </div>

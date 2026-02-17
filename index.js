@@ -53,7 +53,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 app.use(morgan('dev'));
-app.use(helmet({
+app.use(helmet({    
   crossOriginResourcePolicy: false
 }));
 
